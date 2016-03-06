@@ -13,19 +13,20 @@ public class LonelyNumber {
         System.out.println(new LonelyNumber().find(array));
     }
     public int find(int[] input) {
-        int Num = input[0];
-
-        int tempMaxIndex;
-        int tempMinIndex;
-        Arrays.sort(input);
-        for (int i = 0; i < input.length; i++) {
-            int anInput = input[i];
-            tempMaxIndex = (i + 1) > input.length - 1 ? i-1 : i+1;
-            tempMinIndex = (i - 1) < 0 ? i + 1 : i-1;
-            if (input[i]!=input[tempMaxIndex] && input[i]!=input[tempMinIndex]) {
-                Num = anInput;
+        int[] sums  = new int[32];
+        for (int number : input) {
+            for (int j = 0; j < 32; j++) {
+                int mask = 1 << j;
+                if ((number & mask) != 0) {
+                    sums[j] += 1;
+                }
             }
         }
-        return Num;
+        int result = 0;
+        for (int i = 0; i < 32; i++) {
+            result <<= 1;
+            result += sums[31-i] % 5;
+        }
+        return result;
     }
 }
