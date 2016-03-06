@@ -13,20 +13,24 @@ public class LonelyNumber {
         System.out.println(new LonelyNumber().find(array));
     }
     public int find(int[] input) {
-        int[] sums  = new int[32];
+        int[] units = new int[32];
+        int result = 0;
+
         for (int number : input) {
+            int mask = 1;
             for (int j = 0; j < 32; j++) {
-                int mask = 1 << j;
-                if ((number & mask) != 0) {
-                    sums[j] += 1;
-                }
+                boolean hasBit = (number & mask) != 0;
+                units[31 - j] += hasBit ? 1 : 0;
+                mask <<= 1;
             }
         }
-        int result = 0;
-        for (int i = 0; i < 32; i++) {
-            result <<= 1;
-            result += sums[31-i] % 5;
+
+        for (int unit : units) {
+            unit %= 5;
+            result = result << 1;
+            result += (unit & 1);
         }
+
         return result;
     }
 }
